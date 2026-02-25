@@ -21,7 +21,7 @@ bot.on("message:text", (ctx) => {
 
   ctx.reply("Sending to printer: " + ctx.message.text);
 
-  if (!urls.has(ctx.message.text)) {
+  if (!urls.has("http://" + ctx.message.text)) {
     client.publish(
       process.env.PRINTER_MAC,
       "TEXT,0,0:" + wordwrap.wrap(ctx.message.text, { width: 32 }),
