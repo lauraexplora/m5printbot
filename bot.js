@@ -20,11 +20,19 @@ bot.on("message:text", (ctx) => {
   const urls = getUrls(ctx.message.text);
 
   ctx.reply("Sending to printer: " + ctx.message.text);
-  client.publish(
-    process.env.PRINTER_MAC,
-    "TEXT,0,0:" + wordwrap.wrap(ctx.message.text, { width: 32 }),
-  );
+
+  if (!urls.has(ctx.message.text)) {
+    client.publish(
+      process.env.PRINTER_MAC,
+      "TEXT,0,0:" + wordwrap.wrap(ctx.message.text, { width: 32 }),
+    );
+  }
+
   urls.forEach((url) => {
+    client.publish(
+      process.env.PRINTER_MAC,
+      "TEXT,0,0:" + wordwrap.wrap(url, { width: 32 }),
+    ),
     client.publish(process.env.PRINTER_MAC, "QR:" + url);
   });
 });
